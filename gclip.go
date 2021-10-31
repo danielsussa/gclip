@@ -5,26 +5,27 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"github.com/atotto/clipboard"
 	"os"
 	"os/signal"
-	"strings"
+	"regexp"
 	"syscall"
+
+	"github.com/atotto/clipboard"
+	"github.com/gookit/color"
 )
-
-const red    = "\033[31m"
-const reset  = "\033[0m"
-
 
 // go install gclip.go
 func main() {
 	grepPtr := flag.String("grep", "", "select line that contains")
 	flag.Parse()
+
+	grepTxt := *grepPtr
+
 	fi, err := os.Stdin.Stat()
 	if err != nil {
 		panic(err)
 	}
-	if fi.Mode() & os.ModeNamedPipe == 0 {
+	if fi.Mode()&os.ModeNamedPipe == 0 {
 		return
 	}
 
@@ -34,25 +35,36 @@ func main() {
 	go func() {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			text := scanner.Text()
-			if grepPtr != nil && !strings.Contains(text, *grepPtr){
+			text := scanner.Text() + "\n"
+
+			if grepTxt == "" {
+				fmt.Print(text)
+				b.WriteString(text)
 				continue
 			}
-			b.WriteString(text)
-			b.WriteString("\n")
-			fmt.Print(text + "\n")
+
+			ok, err := regexp.MatchString(grepTxt, text)
+			if err != nil {
+				panic(err)
+			}
+
+			if ok {
+				color.Greenp(text)
+				b.WriteString(text)
+			} else {
+				fmt.Print(text)
+			}
 		}
 		endOfLine <- true
 	}()
-
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
 	select {
-	case <- c:
+	case <-c:
 		break
-	case <- endOfLine:
+	case <-endOfLine:
 		break
 	}
 
@@ -60,4 +72,8 @@ func main() {
 	if err := clipboard.WriteAll(allLines); err != nil {
 		panic(err)
 	}
+}
+
+func hasFlag(f *string) bool{
+	return f != nil && *f != ""
 }
