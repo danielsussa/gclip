@@ -25,7 +25,7 @@ Pressing **CTRL+C** in this case will make gclip capture the events and copy to 
 
 Copy command bellow:
 
-    wget https://github.com/danielsussa/gclip/releases/download/0.0.9/gclip -P $HOME/bin/ && chmod +x $HOME/bin/gclip
+    wget https://github.com/danielsussa/gclip/releases/latest/download/gclip -P $HOME/bin/ && chmod +x $HOME/bin/gclip
 
 Open a new terminal tab and test it:
 
