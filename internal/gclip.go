@@ -2,24 +2,19 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"flag"
-	"fmt"
 	"os"
 	"os/signal"
 	"regexp"
 	"syscall"
 
 	"github.com/atotto/clipboard"
-	"github.com/gookit/color"
 )
 
 // go install gclip.go
 func main() {
 	grepPtr := flag.String("grep", "", "select line that contains")
 	flag.Parse()
-
-	grepTxt := *grepPtr
 
 	fi, err := os.Stdin.Stat()
 	if err != nil {
@@ -28,18 +23,20 @@ func main() {
 	if fi.Mode()&os.ModeNamedPipe == 0 {
 		return
 	}
+	gClip(&consoleController{}, *grepPtr)
+}
 
+func gClip(controller Controller, grepTxt string) {
 	// read from terminal
 	endOfLine := make(chan bool)
-	var b bytes.Buffer
 	go func() {
-		scanner := bufio.NewScanner(os.Stdin)
+		scanner := bufio.NewScanner(controller.Reader())
 		for scanner.Scan() {
 			text := scanner.Text() + "\n"
 
 			if grepTxt == "" {
-				fmt.Print(text)
-				b.WriteString(text)
+				controller.Print(text)
+				controller.Store(text)
 				continue
 			}
 
@@ -49,10 +46,10 @@ func main() {
 			}
 
 			if ok {
-				color.Greenp(text)
-				b.WriteString(text)
+				controller.PrintGreen(text)
+				controller.Store(text)
 			} else {
-				fmt.Print(text)
+				controller.Print(text)
 			}
 		}
 		endOfLine <- true
@@ -68,12 +65,8 @@ func main() {
 		break
 	}
 
-	allLines := b.String()
+	allLines := controller.GetStored()
 	if err := clipboard.WriteAll(allLines); err != nil {
 		panic(err)
 	}
-}
-
-func hasFlag(f *string) bool{
-	return f != nil && *f != ""
 }
