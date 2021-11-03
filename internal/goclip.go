@@ -11,7 +11,7 @@ import (
 	"golang.design/x/clipboard"
 )
 
-// go install gclip.go
+// go install goclip.go
 func main() {
 	grepPtr := flag.String("grep", "", "select line that contains")
 	flag.Parse()
@@ -23,10 +23,10 @@ func main() {
 	if fi.Mode()&os.ModeNamedPipe == 0 {
 		return
 	}
-	gClip(&consoleController{}, *grepPtr)
+	goClip(&consoleController{}, *grepPtr)
 }
 
-func gClip(controller Controller, grepTxt string) {
+func goClip(controller Controller, grepTxt string) {
 	// read from terminal
 	endOfLine := make(chan bool)
 	go func() {

@@ -1,4 +1,4 @@
-module github.com/danielsussa/gclip
+module github.com/danielsussa/goclip
 
 go 1.16
 

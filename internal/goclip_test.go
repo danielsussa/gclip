@@ -23,7 +23,7 @@ func TestGClip(t *testing.T) {
 				assert.Equal(t, "hello\nworld\n", s)
 			},
 		}
-		gClip(NewFakeController([]string{"hello", "world"}, conf), "")
+		goClip(NewFakeController([]string{"hello", "world"}, conf), "")
 	}
 	{
 		conf := ConfigFake{
@@ -42,7 +42,7 @@ func TestGClip(t *testing.T) {
 				assert.Equal(t, "hello\n", s)
 			},
 		}
-		gClip(NewFakeController([]string{"hello", "world"}, conf), "hello")
+		goClip(NewFakeController([]string{"hello", "world"}, conf), "hello")
 	}
 	{
 		conf := ConfigFake{
@@ -64,6 +64,6 @@ func TestGClip(t *testing.T) {
 				assert.Equal(t, "w0rld\n", s)
 			},
 		}
-		gClip(NewFakeController([]string{"hello", "my", "w0rld"}, conf), "[0-9]")
+		goClip(NewFakeController([]string{"hello", "my", "w0rld"}, conf), "[0-9]")
 	}
 }
