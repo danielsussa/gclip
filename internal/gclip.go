@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"syscall"
 
-	"github.com/atotto/clipboard"
+	"golang.design/x/clipboard"
 )
 
 // go install gclip.go
@@ -66,7 +66,6 @@ func gClip(controller Controller, grepTxt string) {
 	}
 
 	allLines := controller.GetStored()
-	if err := clipboard.WriteAll(allLines); err != nil {
-		panic(err)
-	}
+
+	clipboard.Write(clipboard.FmtText, []byte(allLines))
 }
