@@ -1,12 +1,11 @@
 name: Go
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       tag:
         description: 'The tag version'
         required: true
-        type: string
 
 jobs:
 
