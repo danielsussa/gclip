@@ -35,5 +35,3 @@ Open a new terminal tab and test it:
 Simple!
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
-
-[![Release](https://github.com/danielsussa/gclip/actions/workflows/release.yml/badge.svg)](https://github.com/danielsussa/gclip/actions/workflows/release.yml)
