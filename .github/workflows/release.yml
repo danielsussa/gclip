@@ -19,7 +19,7 @@ jobs:
         go-version: 1.17
 
     - name: Build
-      run: CGO_ENABLED="0" GOOS=linux GOARCH=amd64 go build -o gclip ./internal/*.go
+      run: CGO_ENABLED="0" GOOS=linux GOARCH=amd64 go build -o gclip ./internal/*.go &&  gzip -f gclip
 
     - name: Test
       run: sudo apt install -y libx11-dev && sudo apt install -y xvfb && Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & export DISPLAY=:99.0 && go test -v ./...
@@ -42,6 +42,6 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/gclip.linux-amd64.tar.gz
-        asset_name: gclip.linux-amd64.tar.gz
+        asset_path: gclip.tar.gz
+        asset_name: gclip.tar.gz
         asset_content_type: application/gzip
