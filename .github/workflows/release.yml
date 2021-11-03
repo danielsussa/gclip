@@ -23,3 +23,23 @@ jobs:
 
     - name: Test
       run: sudo apt install -y libx11-dev && sudo apt install -y xvfb && Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & export DISPLAY=:99.0 && go test -v ./...
+
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: gclip
+        tag_name: ${{ github.ref }}
+        body_path: CHANGELOG.md
+
+    - name: upload linux artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/gclip.linux-amd64.tar.gz
+        asset_name: gclip.linux-amd64.tar.gz
+        asset_content_type: application/gzip
