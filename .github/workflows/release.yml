@@ -34,7 +34,7 @@ jobs:
         prerelease: false
         release_name: gclip
         tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
+#        body_path: CHANGELOG.md
 
     - name: upload linux artifact
       uses: actions/upload-release-asset@v1
