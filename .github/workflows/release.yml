@@ -19,7 +19,7 @@ jobs:
         go-version: 1.17
 
     - name: Deps
-      run: sudo apt install -y libx11-dev
+      run: sudo apt install -y libx11-dev && sudo apt install -y xvfb
 
     - name: Build
       run: CGO_ENABLED="0" GOOS=linux GOARCH=amd64 go build -o gclip ./internal/*.go
