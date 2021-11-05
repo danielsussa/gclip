@@ -3,12 +3,11 @@ package main
 import (
 	"bufio"
 	"flag"
+	"github.com/atotto/clipboard"
 	"os"
 	"os/signal"
 	"regexp"
 	"syscall"
-
-	"golang.design/x/clipboard"
 )
 
 // go install goclip.go
@@ -23,10 +22,14 @@ func main() {
 	if fi.Mode()&os.ModeNamedPipe == 0 {
 		return
 	}
-	goClip(&consoleController{}, *grepPtr)
+
+	toCopy := goClip(&consoleController{}, *grepPtr)
+	if err := clipboard.WriteAll(toCopy); err != nil {
+		panic(err)
+	}
 }
 
-func goClip(controller Controller, grepTxt string) {
+func goClip(controller Controller, grepTxt string) string {
 	// read from terminal
 	endOfLine := make(chan bool)
 	go func() {
@@ -65,7 +68,5 @@ func goClip(controller Controller, grepTxt string) {
 		break
 	}
 
-	allLines := controller.GetStored()
-
-	clipboard.Write(clipboard.FmtText, []byte(allLines))
+	return controller.GetStored()
 }

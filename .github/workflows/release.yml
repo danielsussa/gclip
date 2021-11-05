@@ -23,7 +23,7 @@ jobs:
       run: CGO_ENABLED="1" GOOS=linux GOARCH=amd64 go build -o goclip ./internal/*.go
 
     - name: Test
-      run: sudo apt install -y libx11-dev && sudo apt install -y xvfb && Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & export DISPLAY=:99.0 && go test -v ./...
+      run: go test -v ./...
 
     - name: release
       uses: actions/create-release@v1
